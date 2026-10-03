@@ -1,5 +1,8 @@
 FROM debian:12-slim
 
+# Cache buster: 1791034773.2308254
+RUN echo "build 1791034773.2308383"
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb scrot xdotool x11-utils python3 \
     libatomic1 \
@@ -13,7 +16,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install official Tencent WeChat for Linux (ARM64)
 RUN wget -q "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb" -O /tmp/wechat.deb \
     && apt-get update \
     && apt-get install -y /tmp/wechat.deb \
@@ -21,7 +23,9 @@ RUN wget -q "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.de
     && ls -la /opt/wechat/wechat
 
 COPY patch_wechat.py /tmp/patch_wechat.py
-RUN python3 /tmp/patch_wechat.py /opt/wechat/wechat && rm /tmp/patch_wechat.py
+RUN python3 /tmp/patch_wechat.py /opt/wechat/wechat \
+    && python3 -c "import sys; d=open('/opt/wechat/wechat','rb').read(); o=135545057; print('VERIFY:', d[o:o+8].hex())" \
+    && rm /tmp/patch_wechat.py
 
 ENV WECHAT_HOME=/data/wechat-home
 ENV QT_QPA_PLATFORM=xcb
