@@ -2,7 +2,7 @@ name: WeChat Moments
 version: "1.0.0"
 slug: wechat_moments
 description: Tencent WeChat Linux client for Moments daily digest automation
-url: https://github.com/tangziyi001/ha-addons
+url: https://github.com/tangziyi001/wechat-ha-addon
 arch:
   - aarch64
 startup: application
@@ -13,4 +13,3 @@ options:
 schema:
   display: str
   screen: str
-image: ghcr.io/tangziyi001/ha-addon-wechat-{arch}
