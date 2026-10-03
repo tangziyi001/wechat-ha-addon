@@ -3,9 +3,13 @@ FROM debian:12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb scrot xdotool x11-utils \
     libatomic1 \
+    libwayland-client0 libwayland-egl1 \
+    libegl1 libgl1 libopengl0 \
     libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
     libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
     libxrandr2 libgbm1 libasound2 libpango-1.0-0 libcairo2 \
+    libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 \
+    libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 \
     wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,6 +21,8 @@ RUN wget -q "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.de
     && ls -la /opt/wechat/wechat || (echo "WECHAT NOT FOUND"; exit 1)
 
 ENV WECHAT_HOME=/data/wechat-home
+ENV QT_QPA_PLATFORM=xcb
+ENV QT_XCB_GL_INTEGRATION=xcb_egl
 RUN mkdir -p $WECHAT_HOME /data/shots
 
 COPY run.sh /run.sh
